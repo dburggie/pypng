@@ -1,0 +1,8 @@
+*.pyc
+*~
+*.png
+samples/
+**/tool*.py
+*.pdf
+*.bin
+
