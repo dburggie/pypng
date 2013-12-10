@@ -3,7 +3,7 @@ import zlib
 import binedit
 from netint import netint
 
-chunk_ids = ['','IHDR','IDAT','IEND','bKGD','tRNS','PLTE','tEXT']
+chunk_ids = ['','IHDR','IDAT','IEND','bKGD','tRNS','PLTE','tEXT', 'gAMA']
 
 class Chunk:
     """Container class for png file chunks."""

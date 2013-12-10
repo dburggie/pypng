@@ -42,6 +42,19 @@ class File:
         # append header chunk to file contents
         self._contents += IHDR.convert()
 
+    def make_gAMA(self, gamma):
+        """Creates the gAMA chunk that stores image gamma value."""
+        
+        # gAMA chunk contains only 4 bytes in it's data field.
+        # those 4 bytes contain an unsigned int in network order equal to the
+        # gamma value times 100,000.
+        if gamma == None or not isinstance(gamma, int):
+            return True
+        gAMA = Chunk('gAMA', [])
+        gAMA.append(gamma, 4)
+        self._contents += gAMA.convert()
+        return False
+
     def make_PLTE(self,palette):
         pass
 

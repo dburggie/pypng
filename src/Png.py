@@ -13,6 +13,7 @@ class Png:
 
     _background_color = None
     _transparent_color = None
+    _gamma = None
     _text = None
 
     #methods
@@ -104,6 +105,16 @@ class Png:
         """Sets image's default pixel color."""
         self._default_color = color
 
+    def set_gamma(self, gamma):
+        """Set's image's gamma value."""
+        if gamma == None:
+            self._gamma = None
+            return False
+        if not isinstance(gamma, float):
+            return True
+        self._gamma = int(gamma * 100000)
+        return False
+
     def set_bit_depth(self, bit_depth):
         """Verifies bit depth and color type get along, then sets bit depth."""
         if bit_depth in [1,2,4,8]:
@@ -140,6 +151,8 @@ class Png:
                 )
 
         # handle special case blocks
+        if self._gamma != None:
+            imagefile.make_gAMA(self._gamma)
         if self._color_type == 3:
             imagefile.make_PLTE(self._palette)
         if not self._background_color == None:

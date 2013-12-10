@@ -1,8 +1,14 @@
+
+# omit files by type
 *.pyc
-*~
 *.png
-samples/
-**/tool*.py
 *.pdf
 *.bin
+*~
+
+# omit test directory
+test/
+
+# omit code generating tools
+tool*.py
 

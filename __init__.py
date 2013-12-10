@@ -1,4 +1,4 @@
-from Png import Png
+from src.Png import Png
 
 gray = 0
 palette = 1
