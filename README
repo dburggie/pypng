@@ -1,1 +1,4 @@
-This git repo is a python module for the creation of PNG images.
+This python module is used for the creation of PNG images.
+
+DEPENDENCIES:
+    pybin -- python module for easy conversion to and from binary data.

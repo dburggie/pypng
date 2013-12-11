@@ -1,4 +1,4 @@
-from binedit import itoc
+from pybin import itoc
 
 def netint(value):
     """Return a four byte string containing the integer in network byte order."""

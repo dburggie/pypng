@@ -1,6 +1,6 @@
 import crc
 import zlib
-import binedit
+import pybin
 from netint import netint
 
 chunk_ids = ['','IHDR','IDAT','IEND','bKGD','tRNS','PLTE','tEXT', 'gAMA']
@@ -20,7 +20,7 @@ class Chunk:
 
         # checksum runs over chunk name and data, so append chunk name first
         for c in self._name:
-            bytefield.append(binedit.ctoi(c))
+            bytefield.append(pybin.ctoi(c))
 
         # append data
         bytefield += self._data
@@ -72,7 +72,7 @@ class Chunk:
             output += binarydata
         else:
             for i in self._data:
-                output += binedit.itoc(i)
+                output += pybin.itoc(i)
 
         # append checksum and return
         output += netint(self._calc_crc())
@@ -85,14 +85,14 @@ class Chunk:
 
         data = ''
         for i in self._data:
-            data += binedit.itoc(i)
+            data += pybin.itoc(i)
 
         data = zlib.compress(data)
 
         # compress data in chunk array (to aid checksum)
         self._data = []
         for c in data:
-            self._data.append(binedit.ctoi(c))
+            self._data.append(pybin.ctoi(c))
         
         # return converted to string
         return self.convert(data)    

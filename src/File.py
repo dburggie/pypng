@@ -1,5 +1,5 @@
 from Chunk import Chunk
-from binedit import itoc
+from pybin import itoc
 from adam7 import adam7
 
 magic_numbers = [137,80,78,71,13,10,26,10]
