@@ -1,4 +1,16 @@
 This python module is used for the creation of PNG images.
 
+Example of use:
+### BEGIN SNIPPET ###
+from pypng import Png
+image = Png(10,10) # width, height of 10
+for y in range(10):
+    for x in range (10):
+        image.set_pixel([10 * (x + y), abs(20*(x - y)), abs(20*(y - x))])
+        # note that the color is an array of length 3 with an integer value
+        # of 0 - 255
+image.write('test_image.png')
+### END SNIPPET ###
+
 DEPENDENCIES:
     pybin -- python module for easy conversion to and from binary data.
