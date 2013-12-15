@@ -1,7 +1,6 @@
 import crc
 import zlib
 import pybin
-from netint import netint
 
 chunk_ids = ['','IHDR','IDAT','IEND','bKGD','tRNS','PLTE','tEXT', 'gAMA']
 
@@ -64,7 +63,7 @@ class Chunk:
 
         # get length and name fields
         output = ''
-        output += netint(len(self._data))
+        output += pybin.iton(len(self._data))
         output += self._name
 
         # append data field
@@ -75,7 +74,7 @@ class Chunk:
                 output += pybin.itoc(i)
 
         # append checksum and return
-        output += netint(self._calc_crc())
+        output += pybin.iton(self._calc_crc())
         return output
 
 
@@ -103,4 +102,30 @@ class Chunk:
         """Constructor defaults to empty with no name."""
         self.set_name(name)
         self._data = data
+
+
+
+    def read(self, infile):
+        
+        if not isinstance(infile, file):
+            return self
+        
+        # read from file
+        l = pybin.ntoi(infile.read(4))
+        contents = infile.read(4 + l)
+        crc = infile.read(4)
+        
+        # parse chunk data
+        self.set_name( contents[:4] )
+        self._data = []
+        for c in contents[4:]:
+            self._data.append(ctoi(c))
+        
+        # check chunk integrity
+        if chunk.calc_crc() != crc:
+            print 'Corrupted chunk'
+            return None
+        
+        # chunk is initialized and clean
+        return self
 
