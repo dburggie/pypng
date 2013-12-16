@@ -1,6 +1,6 @@
 from Chunk import Chunk
-from pybin import itoc
 from adam7 import adam7
+import pybin
 
 magic_numbers = [137,80,78,71,13,10,26,10]
 
@@ -9,11 +9,15 @@ class File:
 
     _contents = ''
     
-    def __init__(self):
+    def __init__(self, ifname = None):
         # insert png file header's magic numbers
         for i in magic_numbers:
             # translate each integer to a single byte
-            self._contents += itoc(i)
+            self._contents += pybin.itoc(i)
+        if isinstance(ifname, str):
+            infile = open(ifname, 'r')
+            self._contents = infile.read()
+            infile.close()
 
     def make_IHDR(self, width, height, bit_depth, color_type, interlace = False):
         """Makes png header chunk."""
@@ -106,16 +110,29 @@ class File:
 
     def write(self,of_name):
         """Writes png file to disk."""
-
-        # open output file
         of = open(of_name, 'w')
-
-        # write file to disk
         of.write(self._contents)
-
-        # close output file
         of.close()
-
+    
+    def read(self):
+        
+        if self._contents[:8] != '\x89PNG\r\n\x1a\n':
+            print 'not a png file'
+            return []
+        
+        if not len(self._contents) > 8:
+            print 'no chunks in file'
+            return []
+        
+        contents = self._contents[8:]
+        chunks = []
+        while len(contents > 0):
+            l = pybin.ntoi(contents[:4])
+            chunk_string = contents[4:12 + l]
+            chunks.append(Chunk().read(chunk_string)
+            contents = contents[12 + l:]
+        
+        return chunks
 
 
 

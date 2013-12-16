@@ -56,7 +56,9 @@ class Chunk:
         for k in range(n):
             self._data.append(stack.pop())
 
-
+    def pop(self, n):
+        """Gets the top n bytes from chunk and puts them into an int."""
+        
 
     def convert(self, binarydata = None):
         """Return chunk data as a string."""
@@ -105,21 +107,27 @@ class Chunk:
 
 
 
-    def read(self, infile):
+    def read(self, string):
         
-        if not isinstance(infile, file):
+        if not isinstance(string,str):
             return self
         
-        # read from file
-        l = pybin.ntoi(infile.read(4))
-        contents = infile.read(4 + l)
-        crc = infile.read(4)
+        # chunk data is length between chunk name and crc
+        l = len(str) - 8
         
-        # parse chunk data
+        # first 4 bytes are chunk name
         self.set_name( contents[:4] )
+        
+        # discard chunk name and crc (4 bytes each) for chunk data
+        contents = string[4:-4]
+        
+        # last 4 bytes are crc
+        crc = pybin.ntoi(string[-4:])
+        
+        # convert that data from binary to ints
         self._data = []
-        for c in contents[4:]:
-            self._data.append(ctoi(c))
+        for c in contents:
+            self._data.append(pybin.ctoi(c))
         
         # check chunk integrity
         if chunk.calc_crc() != crc:
