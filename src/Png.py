@@ -69,6 +69,22 @@ class Png:
     
     
     
+    def get_pixel(self, x, y):
+        """Returns the pixel at xy coordinate."""
+        return self._image[y][x]
+    
+    
+    
+    def gamma_correct(self, gamma):
+        """Gamma corrects every pixel in the image."""
+        for scanlines in self._image:
+            for pixels in scanlines:
+                for i in range(len(pixels)):
+                    pixels[i] = int(((pixels[i] / 256.0) ** gamma) * 256)
+        return self
+    
+    
+    
     def set_dimensions(self, width, height):
         """Sets image dimensions."""
         
@@ -232,7 +248,7 @@ class Png:
         """Parses data chunk while reading file."""
         offset = 1
         for y in range(self._height):
-            print 'getting line',y,'of',self._height
+#            print 'getting line',y,'of',self._height
             for x in range(self._width):
                 pixel = []
                 for s in range(3):
