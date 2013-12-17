@@ -126,11 +126,18 @@ class File:
         
         contents = self._contents[8:]
         chunks = []
-        while len(contents > 0):
+        counter = 1
+        while len(contents) > 0:
+            print 'reading chunk', counter
+            counter += 1
             l = pybin.ntoi(contents[:4])
             chunk_string = contents[4:12 + l]
-            chunks.append(Chunk().read(chunk_string)
+            chunks.append(Chunk().read(chunk_string))
             contents = contents[12 + l:]
+            if len(contents) > 1 and chunks[-1]._name == 'IEND':
+                print 'all chunks read, but still have', len(contents),
+                print 'bytes left to read'
+                break
         
         return chunks
 

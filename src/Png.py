@@ -200,24 +200,24 @@ class Png:
             width += i
         height_array = chunk._data[4:8]
         height = 0
-        bit_depth = chunk_data[8]
+        bit_depth = chunk._data[8]
         if bit_depth != 8:
             print 'can only read bit_depth 8 at this time'
             return True
-        color_type = chunk_data[9]
+        color_type = chunk._data[9]
         if color_type != 2:
             print 'can only read simple rgb images at this time'
             return True
         for i in height_array:
             height *= 256
             height += i
-        if chunk_data[10] != 0:
+        if chunk._data[10] != 0:
             print 'bad compression type byte in', ifname
             return True
-        if chunk_data[11] != 0:
+        if chunk._data[11] != 0:
             print 'bad filter type byte in', ifname
             return True
-        interlace = chunk_data[12]
+        interlace = chunk._data[12]
         if interlace == 1:
             print 'cannot read interlaced images at this time'
             return True
@@ -231,8 +231,9 @@ class Png:
     def _parse_data(self, chunk):
         """Parses data chunk while reading file."""
         offset = 1
-        for y in self._height:
-            for x in self._width:
+        for y in range(self._height):
+            print 'getting line',y,'of',self._height
+            for x in range(self._width):
                 pixel = []
                 for s in range(3):
                     pixel.append(chunk._data[offset])
@@ -245,7 +246,7 @@ class Png:
     
     def _parse_chunk(self, chunk):
         name = chunk._name
-        if not name in ['IHDR','IEND','IDAT']
+        if not name in ['IHDR','IEND','IDAT']:
             print name, 'chunk cannot be read in this version'
             return True
         if name == 'IHDR':
@@ -271,7 +272,7 @@ class Png:
     
     
     
-    def __init__(self, width, height, color_type = 2, bit_depth = 8):
+    def __init__(self, width = 1, height = 1, color_type = 2, bit_depth = 8):
         """Instantiate object."""
         self.set_dimensions(width,height)
         self.set_bit_depth(bit_depth)

@@ -96,7 +96,7 @@ class Chunk:
             self._data.append(pybin.ctoi(c))
         
         # return converted to string
-        return self.convert(data)    
+        return self.convert(data)
 
 
 
@@ -110,13 +110,13 @@ class Chunk:
     def read(self, string):
         
         if not isinstance(string,str):
-            return self
+            raise string
         
         # chunk data is length between chunk name and crc
-        l = len(str) - 8
+        l = len(string) - 8
         
         # first 4 bytes are chunk name
-        self.set_name( contents[:4] )
+        self.set_name( string[:4] )
         
         # discard chunk name and crc (4 bytes each) for chunk data
         contents = string[4:-4]
@@ -130,9 +130,20 @@ class Chunk:
             self._data.append(pybin.ctoi(c))
         
         # check chunk integrity
-        if chunk.calc_crc() != crc:
-            print 'Corrupted chunk'
-            return None
+        checksum = self._calc_crc()
+        if checksum != crc:
+            print 'Corrupted', self._name
+            print '    crc was  ', checksum
+            print '    should be', crc
+            print '    length   ', l
+            raise self
+        
+        # decompress image data if this is the right chunk
+        if self._name == 'IDAT':
+            contents = zlib.decompress(contents)
+            self._data = []
+            for c in contents:
+                self._data.append(pybin.ctoi(c))
         
         # chunk is initialized and clean
         return self
