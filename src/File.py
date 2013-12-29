@@ -65,8 +65,22 @@ class File:
     def make_tRNS(self, color):
         pass
 
-    def make_bKGD(self, color):
-        pass
+    def make_bKGD(self, color, ctype):
+        bKGD = None
+        if ctype == 3:
+            bKGD = Chunk('bKGD', [])
+            bKGD.append(color, 1)
+        if ctype in [0,4]:
+            bKGD = Chunk('bKGD', [])
+            bKGD.append(color, 2)
+        if ctype in [2,6]:
+            bKGD = Chunk('bKGD', [])
+            for i in [0,1,2]:
+                bKGD.append(color[i], 2)
+        if bKGD != None:
+            self._contents += bKGD.convert()
+            return False
+        return True
 
 
     # Clean this up for non-8 bit_depths
