@@ -2,18 +2,41 @@ This python module is used for the creation of PNG images. It is designed for
 ease of use. Its API is defined below.
 
 Module pypng:
+    rgb:
+        color type for red, green, blue with no alpha channel.
+        bit depths 8 and 16 allowed.
+        form for colors is a python list with 3 integer sample values: [r,g,b]
+    rgb_alpha:
+        color type for red, green, blue with alpha channel.
+        bit depths 8 16 allowed.
+        form [r,g,b,a] a is max transparency at 0, opaque at max value
+    gray:
+        color type for grayscale with no alpha channel
+        bitdepths 1,2,4,8,16 allowed
+        form [g] g is brighness of pixel
+    gray_alpha:
+        color type for grayscale with alpha channel
+        bit depths 1,2,4,8,16 allowed
+        form [g,a] g is brightness, a is opacity
+    paletted:
+        color type for paletted colors
+        only bit depth 8 is allowed
+        add color of form [r,g,b] to palette with 'add_palette_color(c)' method
+            returns palette code for this color (of form [p])
     Png class:
         __init__(width, height, color type, bit depth, interlace):
             width: integer specifying how many pixels wide image will be
             height: integer specifying how many pixels tall image will be
             color type: types described above
-            bit_depth: valid values are 1,2,4,8,16. only 8, 16 available for rgb and anything with alpha
+            bit_depth: valid values described per color type above
             interlace: True if interlaced, False if not interlaced
-        set_pixel(x,y,color)::
+        set_pixel(x,y,color):
             x: integer x value in image (0,0 is top left)
             y: integer y value in image (0,0 is top left)
             color: python list of integer sample values (EX: [255,128,64])
-        
+        write(filename):
+            filename: string name of file to write to
+
 
 Example of use:
 ### BEGIN SNIPPET ###
