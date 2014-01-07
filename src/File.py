@@ -62,8 +62,31 @@ class File:
     def make_PLTE(self,palette):
         pass
 
-    def make_tRNS(self, color):
-        pass
+    def make_tRNS(self, color, ctype):
+        # tRNS is a simple chunk
+        # layout depends on color type
+        #   grayscale:
+        #       2 bytes: grayscale sample
+        #   paletted:
+        #       1 byte: palette index value
+        #   rgb:
+        #       2 bytes: red sample
+        #       2 bytes: green sample
+        #       2 bytes: blue sample
+        if ctype == 0 or ctype == 2:
+            # grayscale or rgb
+            tRNS = Chunk('tRNS', [])
+            for sample in color:
+                tRNS.append(sample, 2)
+            return False
+        if ctype == 3:
+            # paletted, 1 alpha value per palette entry
+            tRNS = Chunk('tRNS', [])
+            for alphas in color:
+                tRNS.append(alphas, 1)
+            return False
+        return True
+
 
     def make_bKGD(self, color, ctype):
         bKGD = None
