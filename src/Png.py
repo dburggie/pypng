@@ -11,12 +11,23 @@ class Png:
     _default_color = [0,0,0] # black
     _image = [[_default_color]]
     
+    _palette = []
     _background_color = None
     _transparent_color = None
     _gamma = None
     _text = None
     
     ### methods ###
+    
+    def add_color_to_palette(self, color):
+        if self._palette == None:
+            raise self # adding to non-existent palette
+        if len(self._palette) > 255:
+            raise self # palette overflow
+        self._palette.append(color)
+        return len(self._palette)
+    
+    
     
     def verify_color(self,color):
         """Verifies that a color is in the right format for file parameters."""
@@ -167,6 +178,10 @@ class Png:
         if not color_type in [0,2,3,4,6]:
             return True
         self._color_type = color_type
+        if color_type == 3:
+            self._palette = []
+        else:
+            self._palette = None
         if self.set_bit_depth(self._bit_depth):
             self._bit_depth = 8
         return False
