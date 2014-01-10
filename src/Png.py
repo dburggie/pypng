@@ -25,7 +25,7 @@ class Png:
         if len(self._palette) > 255:
             raise self # palette overflow
         self._palette.append(color)
-        return len(self._palette)
+        return [len(self._palette)]
     
     
     
