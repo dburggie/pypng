@@ -143,6 +143,25 @@ class Png:
     
     
     
+    def set_simple_alpha(self, color, alpha = 0):
+        if self._color_type in [4, 6]:
+            return True
+        elif self._color_type == 3:
+            # handle simple transparency in paletted case
+            index = color[0]
+            if index > 255 or index < 0:
+                return True
+            dif = index - len(self._simple_alpha)
+            for i in range(dif + 1):
+                self._simple_alpha.append(255)
+            self._simple_alpha[index] = alpha
+            return False
+        elif self._color_type in [0,2]:
+            self._simple_alpha = color
+            return False
+        else:
+            return True
+    
     def set_gamma(self, gamma):
         """Set's image's gamma value."""
         if gamma == None:
