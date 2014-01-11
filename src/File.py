@@ -78,12 +78,14 @@ class File:
             tRNS = Chunk('tRNS', [])
             for sample in color:
                 tRNS.append(sample, 2)
+            self._contents += tRNS.convert()
             return False
         if ctype == 3:
             # paletted, 1 alpha value per palette entry
             tRNS = Chunk('tRNS', [])
             for alphas in color:
                 tRNS.append(alphas, 1)
+            self._contents += tRNS.convert()
             return False
         return True
 

@@ -13,7 +13,7 @@ class Png:
     
     _palette = []
     _background_color = None
-    _transparent_color = None
+    _simple_alpha = None
     _gamma = None
     _text = None
     
@@ -224,8 +224,8 @@ class Png:
             imagefile.make_PLTE(self._palette)
         if not self._background_color == None:
             imagefile.make_bKGD(self._background)
-        if not self._transparent_color == None:
-            imagefile.make_tRNS(self._transparent_color)
+        if not self._simple_alpha == None:
+            imagefile.make_tRNS(self._simple_alpha, self._color_type)
         
         # make data block
         imagefile.make_IDAT(self._image)
