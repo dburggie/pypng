@@ -44,21 +44,25 @@ class Chunk:
 
     def append(self, value, n = 1):
         """Appends value in network order to end of chunk within given bytes."""
-
-        # store lower 8 bytes on a stack n times (last bytes may be 0)
-        i = value
-        stack = []
-        for k in range(n):
-            stack.append(value % 256)
-            value /= 256
-
-        # pop bytes off of stack and onto chunk
-        for k in range(n):
-            self._data.append(stack.pop())
+        
+        if n == 1:
+            self._data.append(value)
+        elif n == 2:
+            self._data.append(value / 256)
+            self._data.append(value % 256)
+        else:
+            i = value
+            stack = []
+            for k in range(n):
+                stack.append(i % 256)
+                i /= 256
+            for k in range(n):
+                self._data.append(stack.pop())
+        return self
 
     def pop(self, n):
         """Gets the top n bytes from chunk and puts them into an int."""
-        
+        pass
 
     def convert(self, binarydata = None):
         """Return chunk data as a string."""
